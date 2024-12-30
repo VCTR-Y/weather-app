@@ -23,4 +23,3 @@ body::before {
   filter: blur(8px);
   z-index: -1;
 }
-

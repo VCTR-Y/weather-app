@@ -1,21 +1,87 @@
+import { useEffect, useState } from "react";
+import clearD_icon from "../assets/weather-icons/sunny.svg"
+import clearN_icon from "../assets/weather-icons/clear.svg"
+import partlyD_icon from "../assets/weather-icons/partly_cloudy.svg"
+import partlyN_icon from "../assets/weather-icons/partly_clear.svg"
+import cloudy_icon from "../assets/weather-icons/cloudy.svg"
+import showers_icon from "../assets/weather-icons/scattered_showers.svg"
+import rain_icon from "../assets/weather-icons/showers.svg"
+import thunder_icon from "../assets/weather-icons/strong_tstorms.svg"
+import snow_icon from "../assets/weather-icons/snow_showers.svg"
+import fog_icon from "../assets/weather-icons/fog.svg"
+
 function WeatherCard() {
+
+  const [weatherData, setWeatherData] = useState({});
+
+  useEffect(() => {
+    search("Vancouver")
+  }, []);
+
+  const icons = {
+    "01d": clearD_icon,
+    "01n": clearN_icon,
+    "02d": partlyD_icon,
+    "02n": partlyN_icon,
+    "03d": cloudy_icon,
+    "03n": cloudy_icon,
+    "04d": cloudy_icon,
+    "04n": cloudy_icon,
+    "09d": showers_icon,
+    "09n": showers_icon,
+    "10d": rain_icon,
+    "10n": rain_icon,
+    "11d": thunder_icon,
+    "11n": thunder_icon,
+    "13d": snow_icon,
+    "13n": snow_icon,
+    "50d": fog_icon,
+    "50n": fog_icon,
+  }
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const input = e.target.querySelector(".search-input");
+    search(input.value);
+  }
+
+  const search = async (city) => {
+    try {
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${import.meta.env.VITE_API_KEY}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        const updatedWeatherData = {
+          temperature: Math.round(data.main.temp),
+          description: data.weather[0].main,
+          icon: icons[data.weather[0].icon],
+          city: data.name
+        }
+        
+        setWeatherData(updatedWeatherData);
+
+    } catch (err) {
+
+    }
+  }
 
   return (
     <div className="container">
       <div className="search-container">
-        <form>
+        <form onSubmit={handleSearch}>
           <input className="search-input" type="search" placeholder="Enter a city name"></input>
+          <button className="search-button" type="submit">
+            <i className="fa-solid fa-magnifying-glass"></i>
+          </button>
         </form>
-        <button className="search-button">
-          <i className="fa-solid fa-magnifying-glass"></i>
-        </button>
       </div>
 
       <div className="weather-container">
         <div className="weather">
-          <img src="./src/assets/weather-icons/clear.svg" className="weather-icon" />
-          <h2 className="temperature">20°C</h2>
-          <span className="description">Partly Cloudy</span>
+          <h1 className="city">{weatherData.city}</h1>
+          <img src={weatherData.icon} className="weather-icon" />
+          <h2 className="temperature">{weatherData.temperature}°C</h2>
+          <span className="description">{weatherData.description}</span>
         </div>
 
       </div>
