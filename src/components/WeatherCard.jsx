@@ -13,6 +13,7 @@ import fog_icon from "../assets/weather-icons/fog.svg"
 function WeatherCard() {
 
   const [weatherData, setWeatherData] = useState({});
+  const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {
     search("Vancouver")
@@ -39,6 +40,33 @@ function WeatherCard() {
     "50n": fog_icon,
   }
 
+  const fetchSuggestions = async (query) => {
+    try {
+      const url = `https://api.openweathermap.org/geo/1.0/direct?q=${query}&limit=5&appid=${import.meta.env.VITE_API_KEY}`;
+      const response = await fetch(url);
+      const data = await response.json();
+  
+      setSuggestions(data);
+    } catch (err) {
+      console.error("Error fetching city suggestions:", err);
+    }
+  }
+
+  const handleInputChange = (e) => {
+    const query = e.target.value;
+    if (query) {
+      fetchSuggestions(query);
+    } else {
+      setSuggestions([]);
+    }
+  };
+
+  const handleSuggestionClick = (suggestion) => {
+    const cityName = `${suggestion.name},${suggestion.country}`;
+    setSuggestions([]);
+    search(cityName);
+  };
+
   const handleSearch = (e) => {
     e.preventDefault();
     const input = e.target.querySelector(".search-input");
@@ -50,18 +78,20 @@ function WeatherCard() {
         const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${import.meta.env.VITE_API_KEY}`;
         const response = await fetch(url);
         const data = await response.json();
+        console.log(data);
 
         const updatedWeatherData = {
           temperature: Math.round(data.main.temp),
           description: data.weather[0].main,
           icon: icons[data.weather[0].icon],
-          city: data.name
+          city: data.name,
+          country: data.sys.country
         }
         
         setWeatherData(updatedWeatherData);
 
     } catch (err) {
-
+      alert("Invalid City Name")
     }
   }
 
@@ -69,16 +99,29 @@ function WeatherCard() {
     <div className="container">
       <div className="search-container">
         <form onSubmit={handleSearch}>
-          <input className="search-input" type="search" placeholder="Enter a city name"></input>
+          <input className="search-input" type="search" placeholder="Enter a city name" onChange={handleInputChange}></input>
           <button className="search-button" type="submit">
             <i className="fa-solid fa-magnifying-glass"></i>
           </button>
         </form>
+        {suggestions.length > 0 && (
+          <ul className="suggestions-dropdown">
+            {suggestions.map((suggestion, index) => (
+              <li
+                key={index}
+                onClick={() => handleSuggestionClick(suggestion)}
+                className="suggestion-item"
+              >
+                {suggestion.name}, {suggestion.state || ""} {suggestion.country}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       <div className="weather-container">
         <div className="weather">
-          <h1 className="city">{weatherData.city}</h1>
+          <h1 className="city">{weatherData.city}, {weatherData.country}</h1>
           <img src={weatherData.icon} className="weather-icon" />
           <h2 className="temperature">{weatherData.temperature}°C</h2>
           <span className="description">{weatherData.description}</span>

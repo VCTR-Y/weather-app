@@ -5,6 +5,7 @@
   height: 800px;
   width: 600px;
   border-radius: 16px;
+  border: double white;
   background: linear-gradient(30deg, rgba(3,48,213,1) 24%, rgba(0,212,255,1) 100%);
 }
 
@@ -15,6 +16,7 @@
   /* border: solid; */
   width: 100%;
   margin-top: 25px;
+  position: relative;
 }
 
 .search-input {
@@ -62,3 +64,35 @@
 .description {
   font-size: xx-large;
 }
+
+.suggestions-dropdown {
+  position: absolute; /* Positions the dropdown relative to the container */
+  top: calc(5vh + 10px); /* Adjusts the dropdown to appear just below the input field */
+  left: 45.5%; /* Aligns the dropdown horizontally relative to the container */
+  transform: translateX(-50%); /* Centers the dropdown horizontally */
+  width: 20vw; /* Matches the width of the input field */
+  background: rgba(255, 255, 255, 0.9); /* Semi-transparent background to contrast against gradient */
+  border-radius: 16px;
+  border: 1px solid white;
+  margin: 0;
+  padding: 0;
+  z-index: 10; /* Ensures it appears above other elements */
+  max-height: 200px; /* Restricts height for better usability */
+  overflow-y: auto; /* Adds scroll if items exceed max-height */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Adds subtle shadow for visibility */
+  font-size: medium;
+  backdrop-filter: blur(8px); /* Matches input's translucent style */
+}
+
+.suggestion-item {
+  padding: 10px 15px;
+  cursor: pointer;
+  color: #0330d5; /* Matches the gradient theme */
+}
+
+.suggestion-item:hover {
+  background-color: rgba(3, 48, 213, 0.2); /* Highlight on hover */
+  color: #fff;
+}
+
+
