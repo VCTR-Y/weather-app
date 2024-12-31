@@ -9,6 +9,9 @@ import rain_icon from "../assets/weather-icons/showers.svg"
 import thunder_icon from "../assets/weather-icons/strong_tstorms.svg"
 import snow_icon from "../assets/weather-icons/snow_showers.svg"
 import fog_icon from "../assets/weather-icons/fog.svg"
+import wind_icon from "../assets/weather-icons/wind.svg"
+import thermometer_icon from "../assets/weather-icons/thermometer.svg"
+import humidity_icon from "../assets/weather-icons/droplet_heavy.svg"
 
 function WeatherCard() {
 
@@ -85,7 +88,10 @@ function WeatherCard() {
           description: data.weather[0].main,
           icon: icons[data.weather[0].icon],
           city: data.name,
-          country: data.sys.country
+          country: data.sys.country,
+          feels: Math.round(data.main.feels_like),
+          humidity: data.main.humidity,
+          wind: Math.round(data.wind.speed * 3.6)
         }
         
         setWeatherData(updatedWeatherData);
@@ -120,13 +126,36 @@ function WeatherCard() {
       </div>
 
       <div className="weather-container">
+        <h1 className="city">{weatherData.city}, {weatherData.country}</h1>
         <div className="weather">
-          <h1 className="city">{weatherData.city}, {weatherData.country}</h1>
           <img src={weatherData.icon} className="weather-icon" />
-          <h2 className="temperature">{weatherData.temperature}°C</h2>
-          <span className="description">{weatherData.description}</span>
         </div>
+        <h2 className="temperature">{weatherData.temperature}°C</h2>
+        <span className="description">{weatherData.description}</span>
+      </div>
 
+      <div className="detail-container">
+        <div className="humidity">
+          <img src={humidity_icon}/>
+          <div className="footer-text">
+            <span>{weatherData.humidity}%</span>
+            <span>Humidity</span>
+          </div>
+        </div>
+        <div className="feels-like">
+          <img src={thermometer_icon}/>
+          <div className="footer-text">
+            <span>{weatherData.feels}°C</span>
+            <span>Feels Like</span>
+          </div>
+        </div>
+        <div className="wind-speed">
+          <img src={wind_icon}/>
+          <div className="footer-text">
+            <span>{weatherData.wind} km/h</span>
+            <span>Wind Speed</span>
+          </div>
+        </div>
       </div>
     </div>
     

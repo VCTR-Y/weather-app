@@ -1,4 +1,5 @@
 .container {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -42,15 +43,15 @@
   backdrop-filter: grayscale(0.25) brightness(1.1);
 }
 
-
 .weather-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 60%;
   width: 80%;
   margin-top: 30px;
-  
+  /* border: solid; */
 }
 
 .weather-icon {
@@ -95,4 +96,34 @@
   color: #fff;
 }
 
+.detail-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 78px;
+  height: 12%;
+  width: 90%;
+  border: solid 1px;
+  border-radius: 16px;
+  backdrop-filter: brightness(1.5);
+}
+
+.feels-like, .humidity, .wind-speed {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  gap: 8px;
+}
+
+.feels-like img, .humidity img, .wind-speed img {
+  height: 48px;
+}
+
+.footer-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 
